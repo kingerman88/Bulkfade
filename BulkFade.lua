@@ -6,8 +6,8 @@
 		Bulk tweening is when you tween all the elements together for a better transition.
 
 	Version:
-		- 1.2
-		- 6/24/2021
+		- 1.3
+		- 11/12/2021
 
 	Author(s):
 		kingerman88
@@ -48,7 +48,16 @@ local function getAttributesAtValue(element, val)
 end
 
 local function addElement(self, element:Instance, tweenConfig:TweenInfo|nil)
-	if not element:IsA("GuiObject") then return end;
+	-- Specialized UI stroke elements
+	if element:IsA("UIStroke") then
+		element:SetAttribute("Transparency", element.Transparency);
+		table.insert(self.UiElements, element);
+		self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, element:GetAttributes());
+		self.DisappearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, {Transparency = 1});
+		return;
+	elseif not element:IsA("GuiObject") then
+		return;
+	end
 
 	element:SetAttribute("BackgroundTransparency", element.BackgroundTransparency);
 	if ImageElements[element.ClassName] then
