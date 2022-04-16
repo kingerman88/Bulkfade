@@ -6,8 +6,8 @@
 		Bulk tweening is when you tween all the elements together for a better transition.
 
 	Version:
-		- 1.3
-		- 11/12/2021
+		- 1.4
+		- 4/15/2022
 
 	Author(s):
 		kingerman88
@@ -39,35 +39,39 @@ local TextElements = {
 
 -- / Functions / --
 
-local function getAttributesAtValue(element, val)
-	local temp = element:GetAttributes();
-	for i in pairs(temp) do
-		temp[i] = val
+local function getAttributesAtValue(attributes:IndexArray<string, number>, val)
+	local temp = {};
+	for i in pairs(attributes) do
+		temp[i] = val;
 	end
 	return temp;
 end
 
 local function addElement(self, element:Instance, tweenConfig:TweenInfo|nil)
+
+	local attributes = {};
+
 	-- Specialized UI stroke elements
 	if element:IsA("UIStroke") then
-		element:SetAttribute("Transparency", element.Transparency);
+		attributes["Transparency"] = element.Transparency;
 		table.insert(self.UiElements, element);
-		self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, element:GetAttributes());
+		self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, attributes);
 		self.DisappearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, {Transparency = 1});
 		return;
 	elseif not element:IsA("GuiObject") then
 		return;
 	end
 
-	element:SetAttribute("BackgroundTransparency", element.BackgroundTransparency);
+	attributes["BackgroundTransparency"] = element.BackgroundTransparency;
 	if ImageElements[element.ClassName] then
-		element:SetAttribute("ImageTransparency", element.ImageTransparency);
+		attributes["ImageTransparency"] = element.ImageTransparency;
 	elseif TextElements[element.ClassName] then
-		element:SetAttribute("TextTransparency", element.TextTransparency);
+		attributes["TextTransparency"] = element.TextTransparency;
+		attributes["TextStrokeTransparency"] = element.TextStrokeTransparency;
 	end
 	table.insert(self.UiElements, element);
-	self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, element:GetAttributes());
-	self.DisappearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, getAttributesAtValue(element, 1));
+	self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, attributes);
+	self.DisappearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, getAttributesAtValue(attributes, 1));
 end
 
 local function removeElement(self, element)
@@ -85,7 +89,7 @@ BulkFade.__index = BulkFade;
 -- @param elements:ArrayList<Instance> - An arraylist of instances (not nessesarily UI objects)
 -- @param tweenConfig:TweenInfo:optional - a custom tweenInfo that will override the default tweenInfoConfig
 -- @return BulkFadeGroup
-function BulkFade.CreateGroup(elements:ArrayList<Instance>, tweenConfig:TweenInfo)
+function BulkFade.CreateGroup(elements:ArrayList<Instance>, tweenConfig:TweenInfo?)
 	local self = {};
 	self.Faded = false;
 	self.UiElements = {};
