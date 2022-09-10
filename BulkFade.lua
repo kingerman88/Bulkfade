@@ -6,24 +6,22 @@
 		Bulk tweening is when you tween all the elements together for a better transition.
 
 	Version:
-		- 1.4
-		- 4/15/2022
+		- 1.5
+		- 9/10/2022
 
 	Author(s):
 		kingerman88
+		xxkeithx
 ]]
 
 -- / Types / --
-
 type ArrayList<T> = {[number]:T};
 type IndexArray<I,V> = {[I]:V};
 
 -- / Services / --
-
 local TweenService = game:GetService("TweenService");
 
 -- / Variables / --
-
 local DefaultTweenConfiguration = TweenInfo.new(1, Enum.EasingStyle.Cubic)
 
 -- Class Definitions
@@ -38,8 +36,7 @@ local TextElements = {
 }
 
 -- / Functions / --
-
-local function getAttributesAtValue(attributes:IndexArray<string, number>, val)
+local function getAttributesAtValue(attributes: IndexArray<string, number>, val)
 	local temp = {};
 	for i in pairs(attributes) do
 		temp[i] = val;
@@ -47,7 +44,7 @@ local function getAttributesAtValue(attributes:IndexArray<string, number>, val)
 	return temp;
 end
 
-local function addElement(self, element:Instance, tweenConfig:TweenInfo|nil)
+local function addElement(self, element: Instance, tweenConfig: TweenInfo|nil)
 
 	local attributes = {};
 
@@ -81,9 +78,11 @@ local function removeElement(self, element)
 end
 
 -- / BulkFade.lua / --
-
 local BulkFade = {}
 BulkFade.__index = BulkFade;
+
+BulkFade.TweenIn = BulkFade.FadeIn;
+BulkFade.TweenOut = BulkFade.FadeOut;
 
 -- Creates a new tween group
 -- @param elements:ArrayList<Instance> - An arraylist of instances (not nessesarily UI objects)
@@ -126,9 +125,6 @@ function BulkFade:Fade()
 		self:FadeIn();
 	end
 end
-
-BulkFade.TweenIn = BulkFade.FadeIn;
-BulkFade.TweenOut = BulkFade.FadeOut;
 
 -- Simply returns all the elements in the tweengroup
 -- @return ArrayList<GuiObject> - A table of UI elements
