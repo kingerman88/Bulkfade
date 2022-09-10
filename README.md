@@ -1,2 +1,5 @@
 # Bulkfade
-A simple rblx module to help bulktween UI elements in and out
+A simple module to help bulk-tween UI elements.
+[Tutorial](https://youtu.be/FPOsnZrRD0U)
+
+# Documentation
