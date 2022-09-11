@@ -6,7 +6,7 @@
 		Bulk tweening is when you tween all the elements together for a better transition.
 
 	Version:
-		- 1.5
+		- 1.6
 		- 9/10/2022
 
 	Author(s):
