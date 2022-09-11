@@ -34,6 +34,9 @@ local TextElements = {
 	["TextButton"] = true,
 	["TextBox"] = true,
 }
+local ScrollingElements = {
+	["ScrollingFrame"] = true
+}
 
 -- / Functions / --
 local function getAttributesAtValue(attributes: IndexArray<string, number>, val)
@@ -62,9 +65,11 @@ local function addElement(self, element: Instance, tweenConfig: TweenInfo|nil)
 	attributes["BackgroundTransparency"] = element.BackgroundTransparency;
 	if ImageElements[element.ClassName] then
 		attributes["ImageTransparency"] = element.ImageTransparency;
-	elseif TextElements[element.ClassName] then
+	end if TextElements[element.ClassName] then
 		attributes["TextTransparency"] = element.TextTransparency;
 		attributes["TextStrokeTransparency"] = element.TextStrokeTransparency;
+	end if ScrollingElements[element.ClassName] then
+		attributes["ScrollBarImageTransparency"] = element.ScrollBarImageTransparency;
 	end
 	table.insert(self.UiElements, element);
 	self.AppearTweens[element] = TweenService:Create(element, tweenConfig or DefaultTweenConfiguration, attributes);
